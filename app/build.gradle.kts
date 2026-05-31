@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -18,6 +19,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        compose = true
     }
 
     buildTypes {
@@ -47,6 +52,15 @@ dependencies {
     implementation(libs.androidx.camera.compose)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
+
+    // Jetpack Compose (gestionado por el BOM)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
