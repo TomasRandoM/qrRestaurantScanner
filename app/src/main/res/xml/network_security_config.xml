@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Permite trafico sin cifrar (HTTP) SOLO para el server local de desarrollo.
+  El resto de la app sigue exigiendo HTTPS. Si cambia la IP del server, actualizala aca.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">192.168.1.34</domain>
+    </domain-config>
+</network-security-config>
