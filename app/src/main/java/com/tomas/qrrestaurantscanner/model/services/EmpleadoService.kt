@@ -1,7 +1,13 @@
 package com.tomas.qrrestaurantscanner.model.services
 
+import android.content.Context
+import com.tomas.qrrestaurantscanner.model.database.AppDatabase
 import com.tomas.qrrestaurantscanner.model.entities.Empleado
+import com.tomas.qrrestaurantscanner.model.entities.LecturaOffline
+import com.tomas.qrrestaurantscanner.network.ApiService
 import com.tomas.qrrestaurantscanner.network.RetrofitClient
+import com.tomas.qrrestaurantscanner.storage.Storage
+import okio.IOException
 
 class EmpleadoService {
     suspend fun getAllEmpleados(): List<Empleado> {
@@ -23,8 +29,13 @@ class EmpleadoService {
         }
     }
 
-    suspend fun saveEmpleados() {
+    suspend fun saveEmpleados(context: Context) {
         val empleados = getAllEmpleados()
-
+        val db = AppDatabase.getInstance(context)
+        val dao = db.empleadoDao()
+        empleados.forEach {
+            empleado -> dao.insert(empleado)
+        }
     }
+
 }

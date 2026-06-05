@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Permiso para usar la cámara y declaración de que el equipo necesita una -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- Permiso para hacer llamadas a la API por internet -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-feature android:name="android.hardware.camera.any" android:required="true" />
 

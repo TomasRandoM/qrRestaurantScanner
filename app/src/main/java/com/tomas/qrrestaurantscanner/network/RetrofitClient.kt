@@ -1,5 +1,6 @@
 package com.tomas.qrrestaurantscanner.network
 
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,10 +24,14 @@ class RetrofitClient {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build()
 
+            val gson = GsonBuilder()
+                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+                .create()
+
             return Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .client(client)
-                .addConverterFactory(GsonConverterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create(gson))
                 .build()
                 .create(ApiService::class.java)
         }

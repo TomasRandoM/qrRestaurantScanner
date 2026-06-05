@@ -21,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,7 +37,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import com.tomas.qrrestaurantscanner.model.services.LecturaService
 import com.tomas.qrrestaurantscanner.model.services.QRService
+import com.tomas.qrrestaurantscanner.network.NetworkMonitor
 import com.tomas.qrrestaurantscanner.scanner.camera.CameraManager
 import com.tomas.qrrestaurantscanner.storage.Storage
 import kotlinx.coroutines.delay
@@ -77,6 +80,16 @@ private fun QrScannerScreen(lifecycleOwner: LifecycleOwner) {
         hasCameraPermission = granted
     }
     val scope = rememberCoroutineScope()
+    val networkMonitor = remember { NetworkMonitor(context) }
+    val isConnected by networkMonitor.isConnected.collectAsState()
+
+    LaunchedEffect(isConnected) {
+        if (isConnected) {
+            if (!Storage(context).getInternet()) {
+                LecturaService().checkEmpleadoOfflineEntries(context)
+            }
+        }
+    }
     LaunchedEffect(scannedValue) {
         if (scannedValue != null) {
             delay(6000L)
@@ -101,7 +114,7 @@ private fun QrScannerScreen(lifecycleOwner: LifecycleOwner) {
                         scannedValue = value
                         scope.launch {
                             try {
-                                message = QRService().validateQR(value, qrKey)
+                                message = QRService().validateQR(context, value, qrKey)
                                 color = Color.Green
 
                             } catch (e: Exception) {

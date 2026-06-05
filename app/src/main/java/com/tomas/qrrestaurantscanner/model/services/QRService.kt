@@ -1,5 +1,6 @@
 package com.tomas.qrrestaurantscanner.model.services
 
+import android.content.Context
 import android.util.Log
 import com.tomas.qrrestaurantscanner.model.entities.Empleado
 import com.tomas.qrrestaurantscanner.model.entities.QRSecrets
@@ -15,7 +16,7 @@ class QRService {
         }
     }
 
-    suspend fun validateQR(value: String, qrkey: String?): String {
+    suspend fun validateQR(context: Context, value: String, qrkey: String?): String {
         if (qrkey != null) {
             val parts = value.split(",")
             if (parts.size != 2) {
@@ -26,7 +27,8 @@ class QRService {
             if (key != qrkey) {
                 throw Exception("La key es inválida. Intente conectar su teléfono a internet para actualizarla")
             }
-            return employeeId
+            LecturaService().checkEmpleadoEntry(context, employeeId)
+            return "ENTRADA ACEPTADA"
         }
         else {
             throw Exception("La key es inválida. Intente conectar su teléfono a internet para actualizarla")

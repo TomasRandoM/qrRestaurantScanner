@@ -28,6 +28,15 @@ class Storage(context: Context) {
         return id
     }
 
+    fun storeInternet(internet: Boolean) {
+        prefs?.edit() { putBoolean("internet", internet)}
+    }
+
+    fun getInternet(): Boolean {
+        val internet: Boolean = prefs.getBoolean("internet", false)
+        return internet
+    }
+
     fun getQrKey(): String? {
         val qrKey: String? = prefs?.getString("qrKey", null)
         return qrKey

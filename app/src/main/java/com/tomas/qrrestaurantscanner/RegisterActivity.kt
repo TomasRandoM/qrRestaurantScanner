@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.tomas.qrrestaurantscanner.model.services.EmpleadoService
+import com.tomas.qrrestaurantscanner.model.services.LecturaService
 import com.tomas.qrrestaurantscanner.model.services.LoginService
 import com.tomas.qrrestaurantscanner.model.services.QRService
 import com.tomas.qrrestaurantscanner.network.RetrofitClient
@@ -61,7 +62,8 @@ class RegisterActivity : ComponentActivity() {
                                 val id = Storage(context).getId()
                                 val key = QRService().updateQRKey(id!!)
                                 Storage(context).storeQrKey(key.qrKey)
-                                EmpleadoService().saveEmpleados()
+                                EmpleadoService().saveEmpleados(context)
+                                LecturaService().checkEmpleadoOfflineEntries(context)
                                 val intent = Intent(context, MainActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
@@ -144,7 +146,7 @@ private fun RegisterScreen() {
                         Storage(context).storeId(id)
                         val key = QRService().updateQRKey(id)
                         Storage(context).storeQrKey(key.qrKey)
-                        EmpleadoService().saveEmpleados();
+                        EmpleadoService().saveEmpleados(context);
                         val intent = Intent(context, MainActivity::class.java).apply {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }

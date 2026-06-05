@@ -1,6 +1,7 @@
 package com.tomas.qrrestaurantscanner.network
 
 import com.tomas.qrrestaurantscanner.model.entities.Empleado
+import com.tomas.qrrestaurantscanner.model.entities.LecturaOffline
 import com.tomas.qrrestaurantscanner.model.entities.Login
 import com.tomas.qrrestaurantscanner.model.entities.QRSecrets
 import com.tomas.qrrestaurantscanner.model.entities.Token
@@ -19,6 +20,12 @@ interface ApiService {
 
     @GET("api/v1/qr/{id}")
     suspend fun getQRKey(@Path("id") id: String): Response<QRSecrets>
+
+    @POST("api/v1/registroHorario/marcar")
+    suspend fun checkEntry(@Query("empleadoId") empleadoId: String): Response<Unit>
+
+    @POST("api/v1/registroHorario/sync")
+    suspend fun sync(@Body request: List<LecturaOffline>): Response<Unit>
 
     @POST("login")
     suspend fun login(@Body body: Login): Response<Token>
