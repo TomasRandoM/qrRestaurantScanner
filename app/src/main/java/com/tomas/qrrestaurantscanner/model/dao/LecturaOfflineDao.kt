@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface LecturaOfflineDao {
 
     @Query("SELECT * FROM lecturas")
-    fun getAll(): Flow<List<LecturaOffline>>
+    suspend fun getAll(): List<LecturaOffline>
 
     @Query("SELECT * FROM lecturas WHERE id = :id")
     suspend fun getById(id: String): LecturaOffline?

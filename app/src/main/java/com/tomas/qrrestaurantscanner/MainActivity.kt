@@ -85,9 +85,7 @@ private fun QrScannerScreen(lifecycleOwner: LifecycleOwner) {
 
     LaunchedEffect(isConnected) {
         if (isConnected) {
-            if (!Storage(context).getInternet()) {
-                LecturaService().checkEmpleadoOfflineEntries(context)
-            }
+            LecturaService().checkEmpleadoOfflineEntries(context)
         }
     }
     LaunchedEffect(scannedValue) {

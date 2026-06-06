@@ -33,7 +33,7 @@ class Storage(context: Context) {
     }
 
     fun getInternet(): Boolean {
-        val internet: Boolean = prefs.getBoolean("internet", false)
+        val internet: Boolean = prefs.getBoolean("internet", true)
         return internet
     }
 

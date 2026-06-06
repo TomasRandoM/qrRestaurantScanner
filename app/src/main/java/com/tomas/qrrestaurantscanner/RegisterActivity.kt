@@ -64,6 +64,7 @@ class RegisterActivity : ComponentActivity() {
                                 Storage(context).storeQrKey(key.qrKey)
                                 EmpleadoService().saveEmpleados(context)
                                 LecturaService().checkEmpleadoOfflineEntries(context)
+
                                 val intent = Intent(context, MainActivity::class.java).apply {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }

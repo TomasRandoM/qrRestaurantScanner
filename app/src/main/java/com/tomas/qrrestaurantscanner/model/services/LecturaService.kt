@@ -9,14 +9,20 @@ import com.tomas.qrrestaurantscanner.network.RetrofitClient
 import com.tomas.qrrestaurantscanner.storage.Storage
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.forEach
+import okhttp3.Response
 import okio.IOException
 
 class LecturaService {
     suspend fun checkEmpleadoEntry(context: Context, empleadoId: String) {
         try {
-            RetrofitClient.api.checkEntry(empleadoId)
+            val response = RetrofitClient.api.checkEntry(empleadoId)
+            if (!response.isSuccessful) {
+                Log.d("Internet", "No llega")
+                throw IOException("Error")
+            }
         }
         catch (e: IOException) {
+            Log.d("Internet", "Guardado")
             Storage(context).storeInternet(false);
             val db = AppDatabase.getInstance(context)
             val dao = db.lecturaOfflineDao()
@@ -27,20 +33,22 @@ class LecturaService {
     suspend fun checkEmpleadoOfflineEntries(context: Context) {
         try {
             if (!Storage(context).getInternet()) {
+                Log.d("Internet", "Entrante")
                 val db = AppDatabase.getInstance(context)
                 val dao = db.lecturaOfflineDao()
-                dao.getAll().collect() {lecturas ->
-                    if (!lecturas.isEmpty()) {
-                        RetrofitClient.api.sync(lecturas)
-                    }
+                val lecturas = dao.getAll()
+                if (lecturas.isNotEmpty()) {
+                    RetrofitClient.api.sync(lecturas)
                 }
+                Storage(context).storeInternet(true)
+                dao.deleteAll()
+
             }
         }
         catch (e: IOException) {
             Storage(context).storeInternet(false);
         }
         catch (e: Exception) {
-
         }
     }
 }

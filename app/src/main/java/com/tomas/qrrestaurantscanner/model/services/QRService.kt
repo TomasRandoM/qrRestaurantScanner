@@ -27,8 +27,14 @@ class QRService {
             if (key != qrkey) {
                 throw Exception("La key es inválida. Intente conectar su teléfono a internet para actualizarla")
             }
-            LecturaService().checkEmpleadoEntry(context, employeeId)
-            return "ENTRADA ACEPTADA"
+            try {
+                LecturaService().checkEmpleadoEntry(context, employeeId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                throw Exception("La entrada no fue aceptada")
+            }
+
+            return "INGRESO/EGRESO ACEPTADO"
         }
         else {
             throw Exception("La key es inválida. Intente conectar su teléfono a internet para actualizarla")

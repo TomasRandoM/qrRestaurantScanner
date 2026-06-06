@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface EmpleadoDao {
     @Query("SELECT * FROM empleados")
-    fun getAll(): Flow<List<Empleado>>
+    suspend fun getAll(): List<Empleado>
 
     @Query("SELECT * FROM empleados WHERE id = :id")
     suspend fun getById(id: String): Empleado?
