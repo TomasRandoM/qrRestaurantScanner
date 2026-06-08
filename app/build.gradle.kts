@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -20,10 +22,21 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val localProps = Properties().apply {
+            val f = rootProject.file("local.properties")
+            if (f.exists()) f.inputStream().use { load(it) }
+        }
+        val apiBaseUrl = localProps.getProperty("API_BASE_URL")
+            ?: System.getenv("API_BASE_URL")
+            ?: "http://192.168.1.34:9000/"
+
+        buildConfigField("String", "API_BASE_URL", "\"$apiBaseUrl\"")
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     buildTypes {

@@ -111,6 +111,8 @@ private fun QrScannerScreen(lifecycleOwner: LifecycleOwner) {
                     if (value != scannedValue) {
                         scannedValue = value
                         scope.launch {
+                            message = "Procesando.."
+                            color = Color.Gray
                             try {
                                 message = QRService().validateQR(context, value, qrKey)
                                 color = Color.Green

@@ -38,4 +38,10 @@ class EmpleadoService {
         }
     }
 
+    suspend fun existsEmpleadoById(context: Context, empleadoId: String): Boolean {
+        val db = AppDatabase.getInstance(context)
+        val dao = db.empleadoDao()
+        val empleado = dao.getById(empleadoId)
+        return empleado != null
+    }
 }

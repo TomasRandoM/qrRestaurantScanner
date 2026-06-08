@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.runtime.collectAsState
 import com.tomas.qrrestaurantscanner.model.database.AppDatabase
 import com.tomas.qrrestaurantscanner.model.entities.LecturaOffline
+import com.tomas.qrrestaurantscanner.model.exceptions.ServiceException
 import com.tomas.qrrestaurantscanner.network.RetrofitClient
 import com.tomas.qrrestaurantscanner.storage.Storage
 import kotlinx.coroutines.flow.collect
@@ -18,7 +19,7 @@ class LecturaService {
             val response = RetrofitClient.api.checkEntry(empleadoId)
             if (!response.isSuccessful) {
                 Log.d("Internet", "No llega")
-                throw IOException("Error")
+                throw ServiceException("El empleado no está habilitado para ingresar.")
             }
         }
         catch (e: IOException) {
@@ -26,7 +27,12 @@ class LecturaService {
             Storage(context).storeInternet(false);
             val db = AppDatabase.getInstance(context)
             val dao = db.lecturaOfflineDao()
-            dao.insert(LecturaOffline(0, empleadoId, java.util.Date()))
+            if (EmpleadoService().existsEmpleadoById(context, empleadoId)) {
+                dao.insert(LecturaOffline(0, empleadoId, java.util.Date()))
+            }
+            else {
+                throw ServiceException("El empleado no está habilitado para ingresar.")
+            }
         }
     }
 

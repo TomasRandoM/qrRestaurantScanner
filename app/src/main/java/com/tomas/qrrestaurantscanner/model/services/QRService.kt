@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import com.tomas.qrrestaurantscanner.model.entities.Empleado
 import com.tomas.qrrestaurantscanner.model.entities.QRSecrets
+import com.tomas.qrrestaurantscanner.model.exceptions.ServiceException
 import com.tomas.qrrestaurantscanner.network.RetrofitClient
 
 class QRService {
@@ -29,6 +30,8 @@ class QRService {
             }
             try {
                 LecturaService().checkEmpleadoEntry(context, employeeId)
+            } catch (ex: ServiceException) {
+                throw ex;
             } catch (e: Exception) {
                 e.printStackTrace()
                 throw Exception("La entrada no fue aceptada")

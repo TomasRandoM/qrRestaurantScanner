@@ -1,6 +1,7 @@
 package com.tomas.qrrestaurantscanner.network
 
 import com.google.gson.GsonBuilder
+import com.tomas.qrrestaurantscanner.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -10,7 +11,7 @@ import java.util.concurrent.TimeUnit
 class RetrofitClient {
 
     companion object {
-        private const val BASE_URL = "http://192.168.1.34:9000/"
+        private val BASE_URL = BuildConfig.API_BASE_URL
 
         private val loggingInterceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
@@ -20,8 +21,8 @@ class RetrofitClient {
             val client = OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
                 .addInterceptor(AuthInterceptor(token))
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(5, TimeUnit.SECONDS)
+                .readTimeout(5, TimeUnit.SECONDS)
                 .build()
 
             val gson = GsonBuilder()
